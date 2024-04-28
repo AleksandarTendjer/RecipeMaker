@@ -9,15 +9,17 @@ const Navbar = ({ navbarItems, className }) => {
   return (
     <nav className={className}>
       <div className="flex items-center gap-2  ml-5 h-full hover:cursor-pointer mr-6">
-        <img src={logo} alt="logo" className="w-6" />
+        <img src={logo} alt="logo" className="w-6 mr-5" />
         <ul className="flex  gap-2 items-center  ">
           {navbarItems?.map((value, index) => {
             return (
               <li key={index} className=" h-full ">
                 <NavLink
-                  className={
-                    'h-full hover:bg-slate-400  flex items-center justify-center p-6'
-                  }
+                  className={({ isActive }) => {
+                    return isActive
+                      ? 'h-full hover:bg-slate-400 dark:bg-slate-600 bg-slate-300 flex items-center justify-center p-2 '
+                      : 'h-full hover:bg-slate-400  flex items-center justify-center p-2 rounded-md ';
+                  }}
                   to={value?.navTo}
                 >
                   {value.name}
@@ -27,7 +29,7 @@ const Navbar = ({ navbarItems, className }) => {
           })}
         </ul>
         <button
-          className="bg-cover bg-center w-32 h-32 flex justify-center items-center border border-gray-300 rounded-md shadow-md ml-auto"
+          className="bg-cover bg-center h-full flex justify-center items-center ml-auto mr-5"
           onClick={toggleDarkMode}
         >
           {isDarkOn ? (
