@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import logo from '../../assets/images/logo.png';
+import logo from '../../assets/images/logo2.png';
 import { MoonIcon, SunIcon } from '../../assets/icons.js';
 import { useContext } from 'react';
 import { ThemeContext } from '../../contexts/ThemeContext.js';
