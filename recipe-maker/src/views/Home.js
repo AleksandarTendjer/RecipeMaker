@@ -7,13 +7,10 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const handleSearch = async () => {
     const params = {
-      app_id: process.env.APP_ID,
-      app_key: process.env.APPLICATION_KEY,
+      app_id: process.env.REACT_APP_APP_ID,
+      app_key: process.env.REACT_APP_APPLICATION_KEY,
       q: searchTerm,
     };
-    console.log(process.env);
-    console.log(process.env.REACT_APP_APP_ID);
-
     const data = await ApiService.fetchData(edamamUrl, params);
     console.log(data);
   };
