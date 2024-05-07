@@ -15,11 +15,11 @@ const Home = () => {
     console.log(data);
   };
   return (
-    <div className="flex justify-center items-center h-screen  flex-col">
+    <div className="flex justify-center items-center h-screen flex-col backdrop-blur bg-slate-600 bg-opacity-40 ">
       <AnimatedText
         text={'Hello!'}
         className={
-          'mb-10 text-gray-500 dark:text-white text-[100px] xs:text-[50px]'
+          'mb-10 text-gray-300 dark:text-white text-[100px] xs:text-[50px]'
         }
       />
       <section className="justify-center items-center ">
@@ -28,7 +28,7 @@ const Home = () => {
             "Hungry? Don't know what to make? Add what food you have and we'll make you a delicious dish."
           }
           className={
-            'm-10 text-gray-500 dark:text-white md:text-[50px]  text-[20px] '
+            'm-10 text-slate-300 dark:text-white md:text-[50px]  text-[20px] '
           }
           el="h3"
         />
