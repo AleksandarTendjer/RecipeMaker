@@ -13,9 +13,7 @@ const Layout = ({ children }) => {
           navbarItems={navlist}
           className=" bg-gray-200 border-b-2  border-gray-300   dark:border-b-0  sticky top-0 rounded-b-lg z-40 w-screen h-12  dark:border-slate-50 dark:bg-neutral-600  shadow-lg"
         />
-        <main className=" h-screen w-screen bg-backgound-fridge bg-no-repeat ">
-          {children}
-        </main>
+        <main className=" h-screen w-screen   bg-no-repeat ">{children}</main>
       </div>
     </ThemeProvider>
   );

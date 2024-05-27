@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { ArrowBack, SearchIcon } from '../../assets/icons';
 
-const SearchBar = ({ searchTerm, setSearchTerm, OnSearch }) => {
+const SearchBar = ({ searchTerm, setSearchTerm, OnSearch, className }) => {
   const handleClear = () => {
     setSearchTerm('');
   };
 
   return (
-    <div className="flex items-center bg-gray-200 rounded-full p-2">
-      <button
+    <div className={className}>
+      <div
         onClick={handleClear}
-        className="flex items-center justify-center h-8 w-8 rounded-full bg-gray-400 text-gray-700  dark:text-white focus:outline-none focus:bg-gray-500"
+        className="flex items-center justify-center h-8 w-8 rounded-full bg-blue-500 text-white hover:bg-blue-600 focus:outline-none cursor-pointer"
       >
         <ArrowBack className={'w-6 h-6'} />
-      </button>
+      </div>
       <input
         type="text"
         value={searchTerm}
