@@ -19,8 +19,13 @@ const Home = () => {
     { label: 'High-Fiber', value: 'high-fiber' },
   ];
   const getSelectedFoodTypesFromStorage = () => {
-    const savedFoodTypes =
-      JSON.parse(localStorage.getItem('selectedFoodTypes')) || [];
+    const data = JSON.parse(localStorage.getItem('selectedFoodTypes')) || {};
+    const { savedFoodTypes, expiration } = data;
+    console.log('data', data);
+    if (!expiration || new Date(expiration) < new Date()) {
+      localStorage.removeItem('selectedFoodTypes');
+      return [];
+    }
     return savedFoodTypes;
   };
   const [selectedFoodTypes, setSelectedFoodTypes] = useState(
@@ -28,9 +33,18 @@ const Home = () => {
   );
 
   useEffect(() => {
+    const expiration = new Date();
+    expiration.setTime(expiration.getTime() + 30 * 60 * 1000);
+    /*const foodTypeValues = selectedFoodTypes.reduce((acc, item) => {
+      acc.push(item.value);
+      return acc;
+    }, []); */
     localStorage.setItem(
       'selectedFoodTypes',
-      JSON.stringify(selectedFoodTypes),
+      JSON.stringify({
+        savedFoodTypes: selectedFoodTypes,
+        expiration: expiration.toISOString(),
+      }),
     );
   }, [selectedFoodTypes]);
 
@@ -49,7 +63,6 @@ const Home = () => {
   const handleFilterToggle = () => {
     setIsFilterVisible(!isFilterVisible);
   };
-  console.log(isFilterVisible);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-slate-600 bg-opacity-40 backdrop-blur">
       <AnimatedText
