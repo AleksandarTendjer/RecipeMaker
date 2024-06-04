@@ -1,16 +1,61 @@
+import React, { useContext, useEffect, useRef } from 'react';
 import SelectButtonGroup from '../ButtonGroups/SelectButtonGroup';
-const FilterContainer = ({ isVisible }) => {
+import { FilterContext } from '../../views/Home';
+import { Transition } from '@headlessui/react';
+
+const FilterContainer = ({ isVisible, setIsFilterVisible }) => {
+  const filterContainerRef = useRef();
+  const {
+    selectedAllergies,
+    setSelectedAllergies,
+    allergies,
+    selectedDiets,
+    setSelectedDiets,
+    diets,
+  } = useContext(FilterContext);
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        filterContainerRef.current &&
+        !filterContainerRef.current.contains(event.target)
+      ) {
+        setIsFilterVisible(!isVisible);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [filterContainerRef]);
   return (
-    <div
-      className={`transition-all duration-500 ease-in-out overflow-hidden ${
-        isVisible ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-      } bg-white dark:bg-slate-500 p-4 rounded-lg shadow-lg mt-4 w-full max-w-md`}
-      style={{ height: isVisible ? 'auto' : '0' }}
+    <Transition
+      show={isVisible}
+      enter="transition-opacity duration-300"
+      enterFrom="opacity-0"
+      enterTo="opacity-100"
+      leave="transition-opacity duration-150"
+      leaveFrom="opacity-100"
+      leaveTo="opacity-0"
     >
-      {' '}
-      {/* Add your filter options here */}
-      <SelectButtonGroup />
-    </div>
+      <div
+        ref={filterContainerRef}
+        className="mt-4 w-full max-w-md rounded-lg bg-white p-4 shadow-lg dark:bg-slate-500"
+      >
+        <h2 className="mb-4 w-full text-center">Allergies</h2>
+        <SelectButtonGroup
+          selectedItems={selectedAllergies}
+          setSelectedItems={setSelectedAllergies}
+          items={allergies}
+        />
+        <h2 className="mb-4 w-full text-center">Diets</h2>
+        <SelectButtonGroup
+          selectedItems={selectedDiets}
+          setSelectedItems={setSelectedDiets}
+          items={diets}
+        />
+      </div>
+    </Transition>
   );
 };
+
 export default FilterContainer;

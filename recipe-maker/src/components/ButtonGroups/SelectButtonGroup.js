@@ -1,42 +1,38 @@
-import React, { useContext } from 'react';
-import { FilterContext } from '../../views/Home';
+import React from 'react';
 
-const SelectButtonGroup = () => {
-  const { selectedFoodTypes, setSelectedFoodTypes, foodTypes } =
-    useContext(FilterContext);
-
-  const handleSelect = (clickedFoodType) => {
-    const alreadyAdded = selectedFoodTypes.find(
-      (selectedFoodType) => selectedFoodType.value === clickedFoodType.value,
+const SelectButtonGroup = ({ selectedItems, setSelectedItems, items }) => {
+  const handleSelect = (clickedItem) => {
+    const alreadyAdded = selectedItems.find(
+      (selectedItem) => selectedItem.value === clickedItem.value,
     );
     alreadyAdded
-      ? setSelectedFoodTypes(
-          selectedFoodTypes.filter(
-            (selectedFoodType) =>
-              selectedFoodType.value !== clickedFoodType.value,
+      ? setSelectedItems(
+          selectedItems.filter(
+            (selectedItem) => selectedItem.value !== clickedItem.value,
           ),
         )
-      : setSelectedFoodTypes([...selectedFoodTypes, clickedFoodType]);
+      : setSelectedItems([...selectedItems, clickedItem]);
   };
+
   return (
-    <ul className="grid grid-cols-3 grid-rows-2 gap-3 ">
-      {foodTypes.map((foodType) => (
+    <ul className="grid grid-cols-3 grid-rows-2 gap-3">
+      {items.map((item) => (
         <li
-          key={foodType.label}
-          onClick={() => handleSelect(foodType)}
-          className={`cursor-pointer p-4 rounded-lg hover:cursor-pointer select-none hover:bg-slate-300   focus:outline-none justify-center items-center ${
-            selectedFoodTypes.find(
-              (alreadySelctFoodType) =>
-                alreadySelctFoodType.value === foodType.value,
+          key={item.label}
+          onClick={() => handleSelect(item)}
+          className={`cursor-pointer select-none items-center justify-center rounded-lg p-4 hover:cursor-pointer hover:bg-slate-300 focus:outline-none ${
+            selectedItems.find(
+              (alreadySelectedItem) => alreadySelectedItem.value === item.value,
             )
               ? 'bg-blue-500 text-white'
               : 'bg-gray-200 text-gray-700'
           } focus:outline-none`}
         >
-          {foodType?.label}
+          {item?.label}
         </li>
       ))}
     </ul>
   );
 };
+
 export default SelectButtonGroup;

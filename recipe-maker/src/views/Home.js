@@ -10,7 +10,7 @@ const Home = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isFilterVisible, setIsFilterVisible] = useState(false);
 
-  const foodTypes = [
+  const diets = [
     { label: 'Vegetarian', value: 'vegetarian' },
     { label: 'Vegan', value: 'vegan' },
     { label: 'Pescatarian', value: 'pescatarian' },
@@ -18,39 +18,49 @@ const Home = () => {
     { label: 'Keto', value: 'keto' },
     { label: 'High-Fiber', value: 'high-fiber' },
   ];
-  const getSelectedFoodTypesFromStorage = () => {
-    const data = JSON.parse(localStorage.getItem('selectedFoodTypes')) || {};
-    const { savedFoodTypes, expiration } = data;
-    console.log('data', data);
+  const allergies = [
+    { label: 'Gluten', value: 'gluten' },
+    { label: 'Peanuts', value: 'peanuts' },
+    { label: 'Shellfish', value: 'shellfish' },
+    { label: 'Soy', value: 'soy' },
+    { label: 'Dairy', value: 'dairy' },
+  ];
+  const getSelectedItemsFromStorage = (key) => {
+    const data = JSON.parse(localStorage.getItem(key)) || {};
+    const { savedItems, expiration } = data;
     if (!expiration || new Date(expiration) < new Date()) {
-      localStorage.removeItem('selectedFoodTypes');
+      localStorage.removeItem(key);
       return [];
     }
-    return savedFoodTypes;
+    return savedItems;
   };
-  const [selectedFoodTypes, setSelectedFoodTypes] = useState(
-    getSelectedFoodTypesFromStorage,
+
+  const [selectedDiets, setSelectedDiets] = useState(
+    getSelectedItemsFromStorage('selectedDiets'),
+  );
+
+  const [selectedAllergies, setSelectedAllergies] = useState(
+    getSelectedItemsFromStorage('selectedAllergies'),
   );
 
   useEffect(() => {
-    const expiration = new Date();
-    expiration.setTime(expiration.getTime() + 30 * 60 * 1000);
-    /*const foodTypeValues = selectedFoodTypes.reduce((acc, item) => {
-      acc.push(item.value);
-      return acc;
-    }, []); */
-    localStorage.setItem(
-      'selectedFoodTypes',
-      JSON.stringify({
-        savedFoodTypes: selectedFoodTypes,
-        expiration: expiration.toISOString(),
-      }),
-    );
-  }, [selectedFoodTypes]);
+    const setItemToStorage = (key, selectedItems) => {
+      const expiration = new Date();
+      expiration.setTime(expiration.getTime() + 30 * 60 * 1000);
+      localStorage.setItem(
+        key,
+        JSON.stringify({
+          savedItems: selectedItems,
+          expiration: expiration.toISOString(),
+        }),
+      );
+    };
+
+    setItemToStorage('selectedAllergies', selectedAllergies);
+    setItemToStorage('selectedDiets', selectedDiets);
+  }, [selectedAllergies, selectedDiets]);
 
   const handleSearch = async () => {
-    console.log('Selected Food Types:', selectedFoodTypes);
-
     const params = {
       app_id: process.env.REACT_APP_APP_ID,
       app_key: process.env.REACT_APP_APPLICATION_KEY,
@@ -64,11 +74,11 @@ const Home = () => {
     setIsFilterVisible(!isFilterVisible);
   };
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-slate-600 bg-opacity-40 backdrop-blur">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-slate-600 bg-opacity-40 backdrop-blur">
       <AnimatedText
         text={'Hello!'}
         className={
-          'mb-10 text-gray-300 dark:text-white text-[100px] xs:text-[50px]'
+          'xs:text-[50px] mb-10 text-[100px] text-gray-300 dark:text-white'
         }
       />
       <section className="text-center">
@@ -77,29 +87,39 @@ const Home = () => {
             "Hungry? Don't know what to make? Add what food you have and we'll make you a delicious dish."
           }
           className={
-            'm-10 text-slate-300 dark:text-white md:text-[40px] text-[20px]'
+            'm-10 text-[20px] text-slate-300 md:text-[40px] dark:text-white'
           }
           el="h3"
         />
       </section>
-      <div className="bg-white dark:bg-slate-500 p-4 rounded-lg shadow-lg w-full max-w-md flex flex-row items-center justify-center">
+      <div className="flex w-full max-w-md flex-row items-center justify-center rounded-lg bg-white p-4 shadow-lg dark:bg-slate-500">
         <SearchBar
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
           OnSearch={handleSearch}
-          className={'flex items-center bg-gray-200 rounded-full p-2 w-full'}
+          className={'flex w-full items-center rounded-full bg-gray-200 p-2'}
         />
         <div
           onClick={handleFilterToggle}
-          className="flex h-8 w-8 rounded-full ml-4 bg-blue-500 text-white hover:bg-blue-600 focus:outline-none cursor-pointer"
+          className="ml-4 flex h-8 w-8 cursor-pointer rounded-full bg-blue-500 text-white hover:bg-blue-600 focus:outline-none"
         >
-          <MoreIcon className={'w-8 h-8'} />
+          <MoreIcon className={'h-8 w-8'} />
         </div>
       </div>
       <FilterContext.Provider
-        value={{ selectedFoodTypes, setSelectedFoodTypes, foodTypes }}
+        value={{
+          selectedAllergies,
+          setSelectedAllergies,
+          allergies,
+          selectedDiets,
+          setSelectedDiets,
+          diets,
+        }}
       >
-        <FilterContainer isVisible={isFilterVisible} />
+        <FilterContainer
+          isVisible={isFilterVisible}
+          setIsFilterVisible={setIsFilterVisible}
+        />
       </FilterContext.Provider>
 
       <ul></ul>
