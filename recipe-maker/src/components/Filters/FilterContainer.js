@@ -47,7 +47,8 @@ const FilterContainer = ({ isVisible, setIsFilterVisible }) => {
           setSelectedItems={setSelectedAllergies}
           items={allergies}
         />
-        <h2 className="mb-4 w-full text-center">Diets</h2>
+
+        <h2 className="mb-4 mt-5 w-full text-center">Diets</h2>
         <SelectButtonGroup
           selectedItems={selectedDiets}
           setSelectedItems={setSelectedDiets}

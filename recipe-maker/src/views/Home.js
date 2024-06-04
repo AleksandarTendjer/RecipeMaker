@@ -4,6 +4,13 @@ import { useState, createContext, useEffect } from 'react';
 import ApiService from '../services/ApiService';
 import { MoreIcon } from '../assets/icons';
 import FilterContainer from '../components/Filters/FilterContainer';
+import { Canvas } from '@react-three/fiber';
+import { OrbitControls } from '@react-three/drei';
+import ObjModel from '../components/Animations/ObjModel';
+
+import tomatoObj from '../assets/objects/tomato.obj';
+import TomatoMtl from '../assets/objects/tomato.mtl';
+
 export const FilterContext = createContext(null);
 const Home = () => {
   const edamamUrl = 'https://api.edamam.com/search';
@@ -25,6 +32,7 @@ const Home = () => {
     { label: 'Soy', value: 'soy' },
     { label: 'Dairy', value: 'dairy' },
   ];
+
   const getSelectedItemsFromStorage = (key) => {
     const data = JSON.parse(localStorage.getItem(key)) || {};
     const { savedItems, expiration } = data;
@@ -75,23 +83,34 @@ const Home = () => {
   };
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-slate-600 bg-opacity-40 backdrop-blur">
-      <AnimatedText
-        text={'Hello!'}
-        className={
-          'xs:text-[50px] mb-10 text-[100px] text-gray-300 dark:text-white'
-        }
-      />
-      <section className="text-center">
-        <AnimatedText
-          text={
-            "Hungry? Don't know what to make? Add what food you have and we'll make you a delicious dish."
-          }
-          className={
-            'm-10 text-[20px] text-slate-300 md:text-[40px] dark:text-white'
-          }
-          el="h3"
+      <Canvas className="mb-2 h-2/5 w-max">
+        <ambientLight intensity={0.7} />
+        <pointLight position={[10, 10, 10]} />
+        <OrbitControls
+          enableZoom={true}
+          minDistance={5}
+          maxDistance={10}
+          target={[0, 0, 0]}
         />
+        <ObjModel
+          objectUrl={tomatoObj}
+          materialUrl={TomatoMtl}
+          position={[0, -0.5, 3]}
+        />
+      </Canvas>
+      <section className="mb-10 flex flex-col items-center justify-center text-center">
+        <AnimatedText
+          text={'Craving Something Delicious?'}
+          className={
+            'xs:text-[50px] mb-4 text-[80px] text-gray-300 dark:text-white'
+          }
+        />
+        <p className="text-[20px] text-slate-300 md:text-[30px] dark:text-white">
+          Discover amazing recipes with the ingredients you have! Let's turn
+          your kitchen into a culinary playground.
+        </p>
       </section>
+
       <div className="flex w-full max-w-md flex-row items-center justify-center rounded-lg bg-white p-4 shadow-lg dark:bg-slate-500">
         <SearchBar
           searchTerm={searchTerm}
